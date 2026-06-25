@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<title>🤖 智慧課堂控制中心 PRO MAX</title>
+
+<style>
+/* =========================
+   🌌 背景升級（更深科技感）
+========================= */
+body {
+    margin: 0;
+    padding: 40px 20px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background:
+        radial-gradient(circle at 20% 20%, #1b6fff33, transparent 45%),
+        radial-gradient(circle at 80% 30%, #8a2be233, transparent 45%),
+        radial-gradient(circle at 50% 80%, #00d4ff22, transparent 45%),
+        #070b14;
+    color: white;
+    text-align: center;
+}
+
+/* =========================
+   🧊 主卡片（更強玻璃感）
+========================= */
+.card {
+    background: rgba(255,255,255,0.06);
+    backdrop-filter: blur(22px);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 28px;
+    padding: 30px;
+    width: 92%;
+    max-width: 820px;
+    margin: auto;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+    transition: 0.3s ease;
+}
+
+/* hover 微浮起 */
+.card:hover {
+    transform: translateY(-2px);
+}
+
+/* 標題 */
+h2 {
+    margin: 0;
+    font-size: 26px;
+    background: linear-gradient(90deg,#4facfe,#00f2fe);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* =========================
+   📐 Dashboard Grid（升級）
+========================= */
+.grid-container {
+    display: grid;
+    gap: 16px;
+    margin: 26px 0;
+    grid-template-columns: repeat(3, 1fr);
+}
+
+/* =========================
+   🔘 按鈕（核心升級）
+========================= */
+.btn-square {
+    height: 150px;
+    border-radius: 24px;
+    border: 1px solid rgba(255,255,255,0.12);
+    color: white;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.25s ease;
+    position: relative;
+    overflow: hidden;
+    padding: 12px;
+}
+
+/* ✨ hover 浮起 + 光暈 */
+.btn-square:hover {
+    transform: translateY(-6px) scale(1.03);
+    box-shadow: 0 18px 40px rgba(0,0,0,0.4);
+}
+
+/* ripple-like 光感 */
+.btn-square::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at center, rgba(255,255,255,0.15), transparent 60%);
+    opacity: 0;
+    transition: 0.3s;
+}
+
+.btn-square:hover::after {
+    opacity: 1;
+}
+
+/* 小說明（badge升級） */
+.btn-desc {
+    font-size: 11px;
+    opacity: 0.9;
+    margin-top: 8px;
+    background: rgba(255,255,255,0.10);
+    padding: 5px 10px;
+    border-radius: 10px;
+    backdrop-filter: blur(6px);
+}
+
+/* =========================
+   🎨 按鈕顏色升級
+========================= */
+.btn-start { background: linear-gradient(135deg,#00c6ff,#0072ff); }
+.btn-q2 { background: linear-gradient(135deg,#a18cd1,#6a11cb); }
+.btn-q3 { background: linear-gradient(135deg,#f6d365,#fda085); color:#111; }
+
+.btn-lock { background: rgba(255,255,255,0.08); }
+.btn-lock.active { background: linear-gradient(135deg,#ff4d4d,#ff0066); }
+
+.btn-results { background: rgba(255,255,255,0.08); }
+.btn-results.active { background: linear-gradient(135deg,#00ff87,#60efff); color:#001018; }
+
+.btn-compare { background: rgba(255,255,255,0.08); }
+.btn-compare.active { background: linear-gradient(135deg,#f7971e,#ffd200); color:#111; }
+
+/* =========================
+   🔘 reset 按鈕升級
+========================= */
+.btn-reset {
+    width: 100%;
+    padding: 16px;
+    border-radius: 16px;
+    border: none;
+    font-weight: 700;
+    cursor: pointer;
+    background: rgba(255,255,255,0.08);
+    color: white;
+    margin-top: 14px;
+    transition: 0.2s;
+}
+
+.btn-reset:hover {
+    background: rgba(255,255,255,0.15);
+    transform: translateY(-2px);
+}
+
+/* =========================
+   📱 RWD（更順）
+========================= */
+@media (max-width: 768px) {
+    body { padding: 18px; }
+
+    .grid-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .btn-square {
+        height: 130px;
+        font-size: 13px;
+    }
+
+    h2 { font-size: 22px; }
+}
+
+@media (max-width: 420px) {
+    .grid-container {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+</head>
+
+<body>
+
+<div class="card">
+    <h2>🚀 智慧課堂控制中心 PRO MAX</h2>
+
+    <div class="grid-container">
+
+        <button class="btn-square btn-start" onclick="publishFirstQuestion()">
+            🚀 Q1 多選題
+            <div class="btn-desc">最多 3 選｜情緒/壓力分析</div>
+        </button>
+
+        <button class="btn-square btn-q2" onclick="publishSecondQuestion()">
+            🎯 Q2 單選題
+            <div class="btn-desc">單一答案選擇</div>
+        </button>
+
+        <button class="btn-square btn-q3" onclick="publishThirdQuestion()">
+            ☁️ Q3 文字題
+            <div class="btn-desc">自由文字輸入</div>
+        </button>
+
+        <button class="btn-square btn-lock" id="lock-btn" onclick="toggleLock()">
+            🔒 鎖定作答
+            <div class="btn-desc" id="lock-status">作答中</div>
+        </button>
+
+        <button class="btn-square btn-results" id="results-btn" onclick="toggleResults()">
+            👀 顯示結果
+            <div class="btn-desc" id="results-status">隱藏</div>
+        </button>
+
+        <button class="btn-square btn-compare" id="compare-btn" onclick="toggleCompare()">
+            📊 數據對比
+            <div class="btn-desc" id="compare-status">關閉</div>
+        </button>
+
+    </div>
+
+    <button class="btn-reset" onclick="resetClass()">🧹 清空課堂</button>
+</div>
+
+<script>
+const firebaseConfig = {
+    apiKey: "AIzaSyD5O7AWuOhufFBTZaveUxUkkpDhu-Rghj4",
+    authDomain: "workshop-926dc.firebaseapp.com",
+    databaseURL: "https://workshop-926dc-default-rtdb.asia-southeast1.firebasedatabase.app/",
+    projectId: "workshop-926dc"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
+let isLocked=false, showResults=false, showComparison=false;
+
+db.ref('is_locked').on('value',s=>{
+    isLocked=!!s.val();
+    document.getElementById("lock-btn").classList.toggle("active",isLocked);
+    document.getElementById("lock-status").innerText=isLocked?"已鎖定":"作答中";
+});
+
+db.ref('show_results').on('value',s=>{
+    showResults=!!s.val();
+    document.getElementById("results-btn").classList.toggle("active",showResults);
+    document.getElementById("results-status").innerText=showResults?"顯示中":"隱藏";
+});
+
+db.ref('show_comparison').on('value',s=>{
+    showComparison=!!s.val();
+    document.getElementById("compare-btn").classList.toggle("active",showComparison);
+    document.getElementById("compare-status").innerText=showComparison?"開啟":"關閉";
+});
+
+/* tasks */
+function publishFirstQuestion(){
+    db.ref('current_task').set({
+        id: Date.now(),
+        type:"multi",
+        question:"面對新學期開始，哪些事情令你最感擔憂？（最多可以選三個選項）",
+        options:["成績退步","學習動力低","功課/考測繁重","難以跟上課程進度","休息時間不足","好友不同班或轉校","無法管理自己的壓力","家人對成績的期望","需要與不熟悉的同學分組合作","在班上被孤立或不受歡迎","要參與很多課外活動","與老師難以溝通","被同學在社交媒體上議論","其他"]
+    });
+    clearAll();
+}
+
+function publishSecondQuestion(){
+    db.ref('current_task').set({
+        id: Date.now(),
+        type:"single",
+        question:"從哪方面改善？",
+        options:["情緒","想法"]
+    });
+    clearAll();
+}
+
+function publishThirdQuestion(){
+    db.ref('current_task').set({
+        id: Date.now(),
+        type:"text",
+        question:"請正向思考描述",
+        options:[]
+    });
+    clearAll();
+}
+
+function toggleLock(){
+    db.ref('is_locked').set(!isLocked);
+}
+function toggleResults(){
+    db.ref('show_results').set(!showResults);
+}
+function toggleCompare(){
+    db.ref('show_comparison').set(!showComparison);
+}
+
+function clearAll(){
+    db.ref('responses').remove();
+    db.ref('is_locked').set(false);
+    db.ref('show_results').set(false);
+    db.ref('show_comparison').set(false);
+}
+
+function resetClass(){
+    db.ref().remove();
+}
+</script>
+
+</body>
+</html>
